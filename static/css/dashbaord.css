@@ -1,0 +1,303 @@
+/* General Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+#Delbtn{
+    margin-top: 0px;
+    background-color: red;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+
+}
+.view {
+    display: none; /* Default: hide all views */
+}
+
+.view.active {
+    display: block; /* Show only the active view */
+}
+
+#ExportBtn{
+margin-top: 31px;
+}
+/* Dashboard Container */
+.dashboard-container {
+height: auto;
+    min-height: 87vh;
+    max-width: 1500px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Navigation Bar */
+.nav-bar {
+    background-color: #4CAF50;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: #fff;
+}
+
+.nav-bar h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.nav-bar a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.nav-bar a:hover {
+    background-color: #45a049;
+}
+
+/* Dashboard Content */
+.dashboard-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+/* Card Styling */
+.card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 1.6rem;
+    color: #333;
+}
+
+.card p {
+    color: #666;
+    font-size: 1rem;
+    margin: 10px 0;
+}
+
+.card button {
+    margin-top: 15px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.card button:hover {
+    background-color: #45a049;
+}
+
+/* General View Styling */
+.view {
+    display: none; /* All views are hidden by default */
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Active View */
+.view.active {
+    display: block; /* Only the active view is displayed */
+}
+
+/* Specific Views Below Home */
+#dashboard-content {
+    display: flex;
+    flex-direction: column; /* Ensure views are stacked vertically */
+    gap: 20px; /* Add space between views */
+}
+
+/* Back Button */
+button {
+    margin-top: 20px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Home View Horizontal Layout */
+#home-view {
+    display: flex;
+    flex-direction: row; /* Align items horizontally */
+    justify-content: space-around; /* Add spacing between cards */
+    align-items: stretch; /* Make all cards the same height */
+    gap: 20px; /* Add spacing between cards */
+    margin-top: 20px;
+}
+
+/* Ensure Cards Fill Space Equally */
+#home-view .card {
+    flex: 1; /* Cards take up equal width */
+    max-width: 300px; /* Optional: Restrict maximum width of cards */
+    text-align: center;
+}
+
+/* Responsive Adjustments for Horizontal Layout */
+@media (max-width: 768px) {
+    #home-view {
+        flex-direction: column; /* Stack cards vertically on smaller screens */
+    }
+
+    #home-view .card {
+        max-width: 100%; /* Allow cards to expand fully in vertical layout */
+    }
+}
+
+/* Add Item Form Toggle Button */
+#toggle-add-item-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
+}
+
+#toggle-add-item-btn:hover {
+    background-color: #0056b3;
+}
+.hidden{
+ display: none;
+}
+/* Add Item Form Styling */
+form#addItemForm {
+     
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+    margin: 0 auto 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, opacity 0.3s;
+}
+
+form#addItemForm input,
+form#addItemForm button {
+    padding: 10px;
+    font-size: 1rem;
+}
+
+form#addItemForm input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+form#addItemForm button {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+form#addItemForm button:hover {
+    background-color: #45a049;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .nav-bar h1 {
+        font-size: 1.5rem;
+    }
+
+    .dashboard-content {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    .card h2 {
+        font-size: 1.4rem;
+    }
+}
+
+/* Inventory Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}

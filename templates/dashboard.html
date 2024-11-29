@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashbaord.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Navigation Bar -->
+        <div class="nav-bar">
+            <h1>Welcome, {{ username }}!</h1>
+            <div>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div id="dashboard-content" class="dashboard-content">
+            <!-- Home View -->
+            <div id="home-view" class="view active">
+                <div class="card">
+                    <h2>Manage Inventory</h2>
+                    <p>View and update products in your inventory.</p>
+                    <button onclick="showView('inventory-view')">Go to Inventory</button>
+                </div>
+             
+             
+              
+                <div class="card">
+                    <h2>Export All Tables</h2>
+                    <p>Tables to Excel</p>
+                    <button id="ExportBtn">Export</button>
+                </div>
+            </div>
+
+            <!-- Inventory View -->
+            <div id="inventory-view" class="view">
+                <h2>Inventory Management</h2>
+                <p>Below is a list of all inventory items:</p>
+                <button onclick="showView('home-view')">Back to Home</button>
+
+   <button id="toggle-add-item-btn">Toggle Add Item Form</button>
+      <button id="ExportTableInventory">Export Table</button>
+
+    <form id="addItemForm" class="hidden">
+        <input type="text" name="product_name" placeholder="Product Name" required />
+        <input type="number" name="quantity" placeholder="Quantity" required />
+        <input type="number" name="price" placeholder="Price" step="0.01" required />
+        <input type="date" name="expiration_date" placeholder="Expiration Date" />
+        <button type="submit">Add Item</button>
+    </form>
+
+<table id="inventoryTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Expiration Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="inventoryTableBody">
+        {% for item in inventory_items %}
+        <tr data-id="{{ item[0] }}">
+            <td>{{ item[0] }}</td>
+            <td>{{ item[1] }}</td>
+            <td>{{ item[2] }}</td>
+            <td>{{ item[3] }}</td>
+            <td>{{ item[4] or 'N/A' }}</td>
+            <td>
+                <button id="Delbtn" onclick="deleteItem({{ item[0] }})">Delete</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+                </div>
+            </div>
+
+
+
+
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+
+</body>
+</html>

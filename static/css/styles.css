@@ -1,56 +1,100 @@
 body {
-    font-family: Arial, sans-serif;
-      background-color: lightblue;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5; /* Light, neutral background for better contrast */
     margin: 0;
     padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ensures the page fills the viewport height */
 }
 
-.login-container, .register-container, .dashboard-container {
-    max-width: 400px;
-    margin: 100px auto;
-    padding: 20px;
-    background: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    text-align: center;
-}
-
-h1 {
-    margin-bottom: 20px;
-    color: #333;
-}
-
-label {
-    display: block;
-    margin: 10px 0 5px;
-}
-
-input[type="text"], input[type="password"] {
+form {
+    background-color: #ffffff; /* Pure white form background for better contrast */
+    border: 1px solid #ddd; /* Subtle border for distinction */
+    border-radius: 12px; /* Softer edges */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Gentle shadow for a modern look */
+    padding: 30px 20px; /* Comfortable padding */
     width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
+    max-width: 400px; /* Responsive width */
+}
+
+input[type="text"], 
+input[type="password"], 
+button {
+    display: block;
+    width: calc(100% - 40px); /* Full width minus padding */
+    margin: 10px auto;
+    padding: 12px 20px;
+    font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 6px; /* Softer input edges */
+    box-sizing: border-box; /* Includes padding and border in width calculation */
+}
+
+input[type="text"]:focus, 
+input[type="password"]:focus {
+    border-color: #007BFF; /* Highlighted border for focus */
+    outline: none; /* Remove default browser outline */
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.4); /* Glow effect */
 }
 
 button {
-    background: #007BFF;
-    color: white;
-    padding: 10px 15px;
+    background-color: #007BFF; /* Primary color */
+    color: #ffffff; /* White text */
+    font-size: 16px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px; /* Rounded button */
+    padding: 12px;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+}
+
+
+
+button:active {
+    background-color: #003f7f; /* Even darker shade on click */
+    transform: translateY(0); /* Reset position */
+}
+
+p {
+    font-size: 14px;
+
+    color: #555; /* Subtle text color */
+}
+
+p button {
+width: auto;
+    background: none; /* Transparent background for inline buttons */
+    color: #007BFF; /* Link-style button color */
+    border: none;
+    padding: 0;
+    font-size: 14px;
+    text-decoration: underline;
     cursor: pointer;
 }
 
-button:hover {
-    background: #0056b3;
+
+#registerForm, #loginForm {
+    display: none;
+}
+#loginForm,#registerForm h1{
+align-self: center;
+text-align: center;
 }
 
-a {
-    color: #007BFF;
-    text-decoration: none;
-}
+/* Responsive Design */
+@media (max-width: 480px) {
+    body {
+        padding: 20px;
+    }
 
-a:hover {
-    text-decoration: underline;
+    form {
+        padding: 20px;
+    }
+
+    input[type="text"], 
+    input[type="password"], 
+    button {
+        font-size: 14px;
+    }
 }

@@ -1,6 +1,6 @@
 import sqlite3
 import os
-
+import pandas as pd
 def setup_database():
     # Define the path to the SQLite database file
     db_path = os.path.join(os.path.dirname(__file__), "../inventory_system.db")
@@ -21,6 +21,16 @@ def setup_database():
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL
+    )
+    """)
+
+    # Create 'roles' table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS roles (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        role TEXT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users (id)
     )
     """)
 

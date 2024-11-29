@@ -3,23 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-
-   
     <title>Login</title>
+
 </head>
 <body>
-    <h1>Login Page</h1>
+    
+
+    <!-- Error Message -->
     {% if error %}
         <p style="color: red;">{{ error }}</p>
     {% endif %}
-    <form method="post">
+
+    <!-- Login Form -->
+    <form id="loginForm" method="post" style="display: none;">
+    <h1>Login Page</h1>
+        <input type="hidden" name="form_type" value="login">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
+        
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
+        
         <button type="submit">Login</button>
+        <p>Don't have an account? 
+            <button type="button" onclick="toggleForm('registerForm')">Register</button>
+        </p>
     </form>
+
+    <!-- Registration Form -->
+    <form id="registerForm" method="post" style="display: none;">
+     <h1>Register Page</h1>
+        <input type="hidden" name="form_type" value="register">
+        <label for="newUsername">Username:</label>
+        <input type="text" id="newUsername" name="username" required>
+        
+        <label for="newPassword">Password:</label>
+        <input type="password" id="newPassword" name="password" required>
+        
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="confirm_password" required>
+        
+        <button type="submit">Register</button>
+        <p>Already have an account? 
+            <button type="button" onclick="toggleForm('loginForm')">Login</button>
+        </p>
+    </form>
+    
+   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

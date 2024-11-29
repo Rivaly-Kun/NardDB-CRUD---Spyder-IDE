@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['database\\setup_database.py', 'main\\crud_operations.py', 'main\\app.py', 'templates\\login.html', 'templates\\register.html', 'static\\css\\styles.css']
+recent_files = ['main\\app.py', 'templates\\dashboard.html', 'static\\js\\script.js', 'static\\css\\dashbaord.css']
 
 [main]
 version = 0.2.0
