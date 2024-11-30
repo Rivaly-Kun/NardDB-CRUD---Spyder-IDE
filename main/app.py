@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from crud_operations import login_user, add_user
+from datetime import datetime
 import sqlite3
 import os
 
@@ -45,9 +46,6 @@ def login():
     return render_template("login.html", show_form="login")
 
 
-
-
-
 @app.route("/dashboard")
 def dashboard():
     if "username" not in session:
@@ -63,84 +61,41 @@ def dashboard():
     return render_template("dashboard.html", username=username, inventory_items=inventory_items)
 
 
-
-@app.route("/add_employee", methods=["POST"])
-def add_employee():
-    if "username" not in session:
-        return jsonify({"error": "Unauthorized"}), 401
-
-    username = request.form["username"]
-    password = request.form["password"]
-    role = request.form["role"]
-
+@app.route("/update_inventory/<int:item_id>", methods=["POST"])
+def update_inventory(item_id):
+    """Update an inventory item."""
     try:
+        product_name = request.form["product_name"]
+        quantity = int(request.form["quantity"])
+        price = float(request.form["price"])
+        expiration_date = request.form.get("expiration_date")
+
         conn = get_db_connection()
         cursor = conn.cursor()
-
-        # Insert the user into the users table
-        cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
-        user_id = cursor.lastrowid
-
-        # Assign the role to the user
-        cursor.execute("INSERT INTO roles (user_id, role) VALUES (?, ?)", (user_id, role))
+        cursor.execute(
+            """
+            UPDATE inventory
+            SET product_name = ?, quantity = ?, price = ?, expiration_date = ?
+            WHERE id = ?
+            """,
+            (product_name, quantity, price, expiration_date, item_id),
+        )
         conn.commit()
         conn.close()
 
-        # Return the new user details
-        return jsonify({"id": user_id, "username": username, "role": role}), 200
-    except sqlite3.IntegrityError as e:
-        return jsonify({"error": f"Username '{username}' already exists."}), 409
+        return jsonify(
+            {
+                "id": item_id,
+                "product_name": product_name,
+                "quantity": quantity,
+                "price": price,
+                "expiration_date": expiration_date or None,
+            }
+        )
     except Exception as e:
+        print("Error updating inventory:", str(e))
         return jsonify({"error": str(e)}), 500
 
-
-@app.route("/get_users", methods=["GET"])
-def get_users():
-    """Fetch all users and their roles."""
-    if "username" not in session:
-        return jsonify({"error": "Unauthorized"}), 401
-
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute("""
-            SELECT users.id, users.username, roles.role 
-            FROM users 
-            LEFT JOIN roles ON users.id = roles.user_id
-        """)
-        users = [{"id": row[0], "username": row[1], "role": row[2]} for row in cursor.fetchall()]
-        conn.close()
-        return jsonify(users)
-    except Exception as e:
-        print("Error fetching users:", str(e))
-        return jsonify({"error": str(e)}), 500
-
-
-
-@app.route("/add_user", methods=["GET", "POST"])
-def add_user_page():
-    """Add a new user and assign a role."""
-    if "username" not in session:
-        return redirect(url_for("login"))  # Ensure user is logged in
-
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        role = request.form["role"]
-
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        try:
-            cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
-            user_id = cursor.lastrowid
-            cursor.execute("INSERT INTO roles (user_id, role) VALUES (?, ?)", (user_id, role))
-            conn.commit()
-        except sqlite3.IntegrityError:
-            return render_template("add_user.html", error="Username already exists.")
-        finally:
-            conn.close()
-        return redirect(url_for("user_management"))
-    return render_template("add_user.html")
 
 
 @app.route("/user_management")
@@ -151,14 +106,17 @@ def user_management():
 
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("""
+    cursor.execute(
+        """
         SELECT users.id, users.username, roles.role 
         FROM users 
         LEFT JOIN roles ON users.id = roles.user_id
-    """)
+        """
+    )
     users = cursor.fetchall()
     conn.close()
     return render_template("user_management.html", users=users)
+
 
 @app.route("/add_inventory", methods=["POST"])
 def add_inventory():
@@ -173,59 +131,34 @@ def add_inventory():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("""
+        cursor.execute(
+            """
             INSERT INTO inventory (product_name, quantity, price, expiration_date) 
             VALUES (?, ?, ?, ?)
-        """, (product_name, quantity, price, expiration_date))
+            """,
+            (product_name, quantity, price, expiration_date),
+        )
         conn.commit()
         item_id = cursor.lastrowid
         conn.close()
 
-        # Log response for debugging
         response_data = {
             "id": item_id,
             "product_name": product_name,
             "quantity": quantity,
             "price": price,
-            "expiration_date": expiration_date or None
+            "expiration_date": expiration_date or None,
         }
-        print("Response data:", response_data)
         return jsonify(response_data)
     except Exception as e:
-        print("Error:", str(e))
+        print("Error adding inventory:", str(e))
         return jsonify({"error": str(e)}), 500
 
 
-
-
-
-
-
-
-
-
-@app.route("/transactions")
-def transactions():
-    """View transaction history."""
-    if "username" not in session:
-        return redirect(url_for("login"))
-
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT transactions.id, users.username, inventory.product_name, transactions.transaction_date 
-        FROM transactions 
-        JOIN users ON transactions.user_id = users.id 
-        JOIN inventory ON transactions.product_id = inventory.id
-    """)
-    transactions = cursor.fetchall()
-    conn.close()
-    return render_template("transactions.html", transactions=transactions)
-
-@app.route('/delete_item/<int:item_id>', methods=['POST'])
+@app.route("/delete_item/<int:item_id>", methods=["POST"])
 def delete_item(item_id):
     if "username" not in session:
-        return {"error": "Unauthorized"}, 401
+        return jsonify({"error": "Unauthorized"}), 401
 
     try:
         conn = get_db_connection()
@@ -234,10 +167,10 @@ def delete_item(item_id):
         conn.commit()
         conn.close()
 
-        return {"success": True}
+        return jsonify({"success": True})
     except Exception as e:
-        return {"error": str(e)}, 500
-
+        print("Error deleting item:", str(e))
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/logout")

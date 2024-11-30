@@ -12,7 +12,12 @@
         <div class="nav-bar">
             <h1>Welcome, {{ username }}!</h1>
             <div>
-                <a href="{{ url_for('logout') }}">Logout</a>
+                <a href="{{ url_for('logout') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="margin-right: 8px;">
+                        <path fill="currentColor" d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z"/>
+                    </svg>
+                    Logout
+                </a>
             </div>
         </div>
 
@@ -25,12 +30,10 @@
                     <p>View and update products in your inventory.</p>
                     <button onclick="showView('inventory-view')">Go to Inventory</button>
                 </div>
-             
-             
-              
+    
                 <div class="card">
                     <h2>Export All Tables</h2>
-                    <p>Tables to Excel</p>
+                    <p>Export all data tables to Excel.</p>
                     <button id="ExportBtn">Export</button>
                 </div>
             </div>
@@ -40,56 +43,81 @@
                 <h2>Inventory Management</h2>
                 <p>Below is a list of all inventory items:</p>
                 <button onclick="showView('home-view')">Back to Home</button>
+                <button id="toggle-add-item-btn">Toggle Add Item Form</button>
+                <button id="ExportTableInventory">Export Table</button>
 
-   <button id="toggle-add-item-btn">Toggle Add Item Form</button>
-      <button id="ExportTableInventory">Export Table</button>
+                <form id="addItemForm" class="hidden">
+                    <input type="text" name="product_name" placeholder="Product Name" required />
+                    <input type="number" name="quantity" placeholder="Quantity" required />
+                    <input type="number" name="price" placeholder="Price" step="0.01" required />
+                    <input type="date" name="expiration_date" placeholder="Expiration Date" />
+                    <button type="submit">Add Item</button>
+                </form>
 
-    <form id="addItemForm" class="hidden">
-        <input type="text" name="product_name" placeholder="Product Name" required />
-        <input type="number" name="quantity" placeholder="Quantity" required />
-        <input type="number" name="price" placeholder="Price" step="0.01" required />
-        <input type="date" name="expiration_date" placeholder="Expiration Date" />
-        <button type="submit">Add Item</button>
-    </form>
 
-<table id="inventoryTable">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Product Name</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Expiration Date</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody id="inventoryTableBody">
-        {% for item in inventory_items %}
-        <tr data-id="{{ item[0] }}">
-            <td>{{ item[0] }}</td>
-            <td>{{ item[1] }}</td>
-            <td>{{ item[2] }}</td>
-            <td>{{ item[3] }}</td>
-            <td>{{ item[4] or 'N/A' }}</td>
-            <td>
-                <button id="Delbtn" onclick="deleteItem({{ item[0] }})">Delete</button>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div id="updateItemModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeUpdateModal()">&times;</span>
+        <form id="updateItemForm">
+            <input type="hidden" name="item_id" />
+            <label>Product Name:</label>
+            <input type="text" name="product_name" required />
+            <label>Quantity:</label>
+            <input type="number" name="quantity" required />
+            <label>Price:</label>
+            <input type="number" name="price" step="0.01" required />
+            <label>Expiration Date:</label>
+            <input type="date" name="expiration_date" />
+            <button type="submit">Update Item</button>
+        </form>
+    </div>
+</div>
 
 
 
-                </div>
+                <table id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Expiration Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTableBody">
+                        {% for item in inventory_items %}
+                        <tr data-id="{{ item[0] }}">
+                            <td>{{ item[0] }}</td>
+                            <td>{{ item[1] }}</td>
+                            <td>{{ item[2] }}</td>
+                            <td>{{ item[3] }}</td>
+                            <td>{{ item[4] or 'N/A' }}</td>
+<td>
+    <button id="EditBtn" onclick="openUpdateModal({{ item[0] }}, '{{ item[1] }}', {{ item[2] }}, {{ item[3] }}, '{{ item[4] or '' }}')">
+        Edit
+    </button>
+    <button
+    id="DeleteBtn" class="delete-btn" data-id="{{ item[0] }}">Delete</button>
+</td>
+
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
 
 
-
-
-
+</div>
+</div>
+        <!-- Footer -->
+        
+<footer style="text-align: center; padding: 10px; background-color: #f1f1f1; margin-top: 20px;">
+    <p>&copy; 2024 NARD Inventory Management System. All rights reserved.</p>
+</footer>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
-
 </body>
 </html>
